@@ -2,10 +2,10 @@
   "name": "log-viewer-app",
   "version": "1.0.0",
   "description": "A web-based log file viewer with advanced filtering and error highlighting",
-  "main": "server.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node api/index.js",
+    "dev": "node api/index.js"
   },
   "keywords": ["log", "viewer", "parser", "web", "tool"],
   "author": "OpsCheckr",
