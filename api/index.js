@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Add request logging for debugging
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} - CLEAN DEPLOYMENT`);
   next();
 });
 
@@ -29,6 +29,15 @@ const upload = multer({
   limits: {
     fileSize: 10 * 1024 * 1024 // 10MB limit
   }
+});
+
+// Test route to verify API is working
+app.get('/test', (req, res) => {
+  res.json({ 
+    message: 'API is working!', 
+    timestamp: new Date().toISOString(),
+    deployment: 'CLEAN_DEPLOYMENT'
+  });
 });
 
 // Routes
