@@ -44,6 +44,10 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+app.get('/log-viewer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'log-viewer.html'));
+});
+
 // Upload endpoint
 app.post('/upload', upload.single('logFile'), (req, res) => {
   try {
