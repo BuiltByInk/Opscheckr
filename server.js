@@ -58,7 +58,8 @@ app.post('/upload', upload.single('logFile'), (req, res) => {
       totalLines: logLines.length
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Error processing file: ' + error.message });
   }
 });
 
@@ -69,13 +70,30 @@ app.get('/log/:filename', (req, res) => {
 
 // Parse log content into structured format
 function parseLogContent(content) {
-  const lines = content.split('\n').filter(line => line.trim() !== '');
-  
-  return lines.map((line, index) => {
-    // Try to parse common log formats
-    const logEntry = parseLogLine(line, index + 1);
-    return logEntry;
-  });
+  try {
+    const lines = content.split('\n').filter(line => line.trim() !== '');
+    
+    return lines.map((line, index) => {
+      try {
+        // Try to parse common log formats
+        const logEntry = parseLogLine(line, index + 1);
+        return logEntry;
+      } catch (lineError) {
+        // Fallback for any line parsing errors
+        return {
+          lineNumber: index + 1,
+          timestamp: '',
+          level: 'INFO',
+          message: line,
+          source: '',
+          raw: line
+        };
+      }
+    });
+  } catch (error) {
+    console.error('Parse content error:', error);
+    return [];
+  }
 }
 
 // Parse individual log line
@@ -169,6 +187,12 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-}); 
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+// For Vercel serverless deployment
+module.exports = app; 
