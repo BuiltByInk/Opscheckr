@@ -8,7 +8,6 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
 
 // Add request logging for debugging
 app.use((req, res, next) => {
@@ -36,20 +35,39 @@ const upload = multer({
 app.get('/', (req, res) => {
   try {
     console.log('Serving index.html');
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    // Use process.cwd() to get the project root in serverless environment
+    const indexPath = path.join(process.cwd(), 'public', 'index.html');
+    console.log('Index path:', indexPath);
+    res.sendFile(indexPath);
   } catch (error) {
     console.error('Error serving index.html:', error);
-    res.status(500).json({ error: 'Error serving index page' });
+    res.status(500).json({ error: 'Error serving index page: ' + error.message });
   }
 });
 
 app.get('/log-viewer', (req, res) => {
   try {
     console.log('Serving log-viewer.html');
-    res.sendFile(path.join(__dirname, '../public/log-viewer.html'));
+    // Use process.cwd() to get the project root in serverless environment
+    const logViewerPath = path.join(process.cwd(), 'public', 'log-viewer.html');
+    console.log('Log viewer path:', logViewerPath);
+    res.sendFile(logViewerPath);
   } catch (error) {
     console.error('Error serving log-viewer.html:', error);
-    res.status(500).json({ error: 'Error serving log viewer page' });
+    res.status(500).json({ error: 'Error serving log viewer page: ' + error.message });
+  }
+});
+
+// Serve static files
+app.get('/script.js', (req, res) => {
+  try {
+    console.log('Serving script.js');
+    const scriptPath = path.join(process.cwd(), 'public', 'script.js');
+    console.log('Script path:', scriptPath);
+    res.sendFile(scriptPath);
+  } catch (error) {
+    console.error('Error serving script.js:', error);
+    res.status(500).json({ error: 'Error serving script: ' + error.message });
   }
 });
 
