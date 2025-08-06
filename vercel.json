@@ -8,8 +8,25 @@
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/log-viewer",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/upload",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/server.js"
     }
-  ]
+  ],
+  "functions": {
+    "server.js": {
+      "maxDuration": 30
+    }
+  }
 } 

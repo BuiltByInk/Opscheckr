@@ -11,6 +11,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// Add request logging for debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
+
 // Configure multer for memory storage (serverless-friendly)
 const upload = multer({ 
   storage: multer.memoryStorage(),
@@ -34,6 +40,15 @@ app.get('/', (req, res) => {
 
 app.get('/log-viewer', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'log-viewer.html'));
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
 });
 
 // Upload endpoint
