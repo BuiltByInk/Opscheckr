@@ -1,6 +1,4 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const cors = require('cors');
 
 const app = express();
@@ -11,7 +9,7 @@ app.use(express.json());
 
 // Add request logging for debugging
 app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} - MINIMAL DEPLOYMENT`);
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url} - FRESH DEPLOYMENT`);
   next();
 });
 
@@ -20,14 +18,14 @@ app.get('/test', (req, res) => {
   res.json({ 
     message: 'API is working!', 
     timestamp: new Date().toISOString(),
-    deployment: 'MINIMAL_DEPLOYMENT'
+    deployment: 'FRESH_DEPLOYMENT'
   });
 });
 
 // Simple landing page
 app.get('/', (req, res) => {
   try {
-    console.log('Serving minimal landing page');
+    console.log('Serving fresh landing page');
     res.setHeader('Content-Type', 'text/html');
     res.send(`
 <!DOCTYPE html>
@@ -49,10 +47,10 @@ app.get('/', (req, res) => {
             </p>
             <div class="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-4">
-                    ✅ Deployment Successful!
+                    ✅ Fresh Deployment Successful!
                 </h2>
                 <p class="text-gray-600 mb-6">
-                    The API is working correctly. This is a minimal deployment to verify everything is functioning.
+                    This is a completely fresh deployment to bypass any caching issues.
                 </p>
                 <div class="space-y-4">
                     <a href="/test" class="block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
@@ -69,13 +67,10 @@ app.get('/', (req, res) => {
 </html>
     `);
   } catch (error) {
-    console.error('Error serving minimal page:', error);
+    console.error('Error serving fresh page:', error);
     res.status(500).json({ error: 'Error serving page: ' + error.message });
   }
 });
-
-// Export for Vercel
-module.exports = app;
 
 // Export for Vercel
 module.exports = app; 
