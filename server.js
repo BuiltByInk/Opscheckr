@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 const cors = require('cors');
 
 const app = express();
@@ -12,20 +11,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    // Keep original filename but add timestamp to avoid conflicts
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
+// Configure multer for memory storage (serverless-friendly)
 const upload = multer({ 
-  storage: storage,
+  storage: multer.memoryStorage(),
   fileFilter: function (req, file, cb) {
     // Only allow .log files
     if (file.mimetype === 'text/plain' || path.extname(file.originalname).toLowerCase() === '.log') {
@@ -55,54 +43,28 @@ app.post('/upload', upload.single('logFile'), (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    const filePath = req.file.path;
     const fileName = req.file.originalname;
     const fileSize = req.file.size;
+    const fileContent = req.file.buffer.toString('utf8');
 
-    // Read the log file content
-    fs.readFile(filePath, 'utf8', (err, data) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error reading file' });
-      }
-
-      // Parse log content into structured format
-      const logLines = parseLogContent(data);
-      
-      res.json({
-        success: true,
-        fileName: fileName,
-        fileSize: fileSize,
-        filePath: filePath,
-        logLines: logLines,
-        totalLines: logLines.length
-      });
+    // Parse log content into structured format
+    const logLines = parseLogContent(fileContent);
+    
+    res.json({
+      success: true,
+      fileName: fileName,
+      fileSize: fileSize,
+      logLines: logLines,
+      totalLines: logLines.length
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Get log content endpoint
+// Get log content endpoint (for serverless, we'll return a simple response)
 app.get('/log/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, 'uploads', filename);
-  
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ error: 'File not found' });
-  }
-
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error reading file' });
-    }
-
-    const logLines = parseLogContent(data);
-    res.json({
-      success: true,
-      logLines: logLines,
-      totalLines: logLines.length
-    });
-  });
+  res.status(404).json({ error: 'File not found - serverless environment does not support file persistence' });
 });
 
 // Parse log content into structured format
