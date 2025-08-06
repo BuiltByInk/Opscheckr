@@ -1,93 +1,117 @@
-# Log File Viewer
+# OpsCheckr - DevOps Tools & Utilities
 
-A modern Node.js application with Tailwind CSS that allows users to upload and view .log files in a structured, searchable format.
+A collection of essential DevOps tools and utilities to streamline your operations workflow.
 
-## Features
+## 🚀 Live Demo
 
-- 📁 **File Upload**: Drag and drop or click to upload .log files
-- 🔍 **Search & Filter**: Search through log content and filter by log levels
-- 📊 **Structured View**: Automatically parses common log formats and displays in a table
-- 📥 **Export**: Export filtered results to CSV format
-- 🎨 **Modern UI**: Beautiful, responsive design with Tailwind CSS
-- ⚡ **Real-time**: Instant search and filtering without page reloads
+Visit [opscheckr.com](https://opscheckr.com) to access all tools.
 
-## Installation
+## 🛠️ Available Tools
 
-1. Navigate to the project directory:
+### 1. Log Visualizer
+**Status: ✅ Available**
+
+Upload and analyze log files with advanced filtering and error highlighting:
+- **Drag & Drop Interface** - Easy file upload
+- **Error Highlighting** - Errors displayed in red for quick identification
+- **Advanced Filtering** - Filter by log level (ERROR, WARN, INFO, DEBUG, SUCCESS)
+- **Search Functionality** - Search through log messages and sources
+- **CSV Export** - Export filtered results to CSV
+- **Responsive Design** - Works on desktop and mobile
+
+### Coming Soon
+- **Network Monitor** - Real-time network performance monitoring
+- **System Health Check** - Comprehensive system diagnostics
+- **Config Validator** - Validate configuration files
+- **Deployment Tracker** - Track and monitor deployments
+- **Resource Monitor** - Monitor system resources
+
+## 🏗️ Architecture
+
+- **Frontend**: HTML5, CSS3 (Tailwind CSS), JavaScript
+- **Backend**: Node.js, Express.js
+- **File Processing**: Multer for file uploads
+- **Deployment**: Vercel
+
+## 🚀 Quick Start
+
+### Local Development
+
+1. **Clone the repository**
    ```bash
-   cd log-viewer-app
+   git clone https://github.com/BuiltByInk/Opscheckr.git
+   cd Opscheckr
    ```
 
-2. Install dependencies:
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-## Usage
-
-1. Start the server:
+3. **Start the development server**
    ```bash
    npm start
    ```
 
-2. Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
+4. **Open your browser**
+   Navigate to `http://localhost:3000`
 
-3. Upload a .log file by either:
-   - Dragging and dropping the file onto the upload area
-   - Clicking "Choose File" and selecting a .log file
+### Deployment
 
-4. Once uploaded, you can:
-   - View the parsed log entries in a structured table
-   - Search through the log content using the search box
-   - Filter by log levels (ERROR, WARN, INFO, DEBUG, SUCCESS)
-   - Export the filtered results to CSV
+This project is configured for deployment on Vercel:
 
-## Supported Log Formats
+1. **Connect your GitHub repository** to Vercel
+2. **Deploy automatically** - Vercel will detect the configuration
+3. **Custom domain** - Configure opscheckr.com in Vercel settings
 
-The application automatically detects and parses common log formats:
-
-- ISO timestamps: `2023-12-27T10:30:45.123Z [INFO] Message`
-- Simple timestamps: `2023-12-27 10:30:45 [INFO] Message`
-- Unix timestamps: `1703679045 [INFO] Message`
-- Level-only: `[INFO] Message`
-
-## File Size Limits
-
-- Maximum file size: 10MB
-- Supported file types: .log files and text files
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 log-viewer-app/
-├── server.js          # Express server with file upload handling
+├── server.js              # Express server
+├── package.json           # Dependencies and scripts
+├── vercel.json           # Vercel deployment config
 ├── public/
-│   ├── index.html     # Main application interface
-│   └── script.js      # Frontend JavaScript functionality
-├── uploads/           # Directory for uploaded files
-├── package.json       # Project dependencies and scripts
-└── README.md         # This file
+│   ├── index.html        # Landing page
+│   ├── log-viewer.html   # Log viewer tool
+│   └── script.js         # Frontend JavaScript
+├── uploads/              # Uploaded log files (excluded from git)
+└── README.md             # This file
 ```
 
-## Development
+## 🔧 Features
 
-To run in development mode with auto-restart:
+### Log Visualizer
+- **File Upload**: Support for .log files
+- **Real-time Parsing**: Instant log analysis
+- **Error Detection**: Automatic error level identification
+- **Responsive Table**: Sortable and searchable log entries
+- **Export Functionality**: Download filtered results as CSV
 
-```bash
-npm install -g nodemon  # Install nodemon globally if not already installed
-npm run dev
-```
+### Landing Page
+- **Professional Design**: Modern, clean interface
+- **Tool Showcase**: Clear presentation of available tools
+- **Future Planning**: Space for upcoming tools
+- **Mobile Responsive**: Works on all devices
 
-## Technologies Used
+## 🤝 Contributing
 
-- **Backend**: Node.js, Express.js, Multer
-- **Frontend**: HTML5, JavaScript (ES6+), Tailwind CSS
-- **File Handling**: Multer for file uploads
-- **Styling**: Tailwind CSS for responsive design
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📄 License
 
-ISC License 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+- Create an issue on GitHub
+- Contact the development team
+
+---
+
+**Built with ❤️ for the DevOps community** 
