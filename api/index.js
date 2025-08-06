@@ -35,10 +35,34 @@ const upload = multer({
 app.get('/', (req, res) => {
   try {
     console.log('Serving index.html');
-    // Use process.cwd() to get the project root in serverless environment
-    const indexPath = path.join(process.cwd(), 'public', 'index.html');
-    console.log('Index path:', indexPath);
-    res.sendFile(indexPath);
+    // Try multiple path approaches for serverless environment
+    const possiblePaths = [
+      path.join(process.cwd(), 'public', 'index.html'),
+      path.join(__dirname, '..', 'public', 'index.html'),
+      path.join(__dirname, '../public', 'index.html')
+    ];
+    
+    console.log('Trying paths:', possiblePaths);
+    
+    for (const filePath of possiblePaths) {
+      try {
+        const fs = require('fs');
+        if (fs.existsSync(filePath)) {
+          console.log('Found file at:', filePath);
+          return res.sendFile(filePath);
+        }
+      } catch (e) {
+        console.log('Path not accessible:', filePath);
+      }
+    }
+    
+    // If no file found, return error with available info
+    res.status(500).json({ 
+      error: 'Could not find index.html',
+      triedPaths: possiblePaths,
+      cwd: process.cwd(),
+      dirname: __dirname
+    });
   } catch (error) {
     console.error('Error serving index.html:', error);
     res.status(500).json({ error: 'Error serving index page: ' + error.message });
@@ -48,10 +72,34 @@ app.get('/', (req, res) => {
 app.get('/log-viewer', (req, res) => {
   try {
     console.log('Serving log-viewer.html');
-    // Use process.cwd() to get the project root in serverless environment
-    const logViewerPath = path.join(process.cwd(), 'public', 'log-viewer.html');
-    console.log('Log viewer path:', logViewerPath);
-    res.sendFile(logViewerPath);
+    // Try multiple path approaches for serverless environment
+    const possiblePaths = [
+      path.join(process.cwd(), 'public', 'log-viewer.html'),
+      path.join(__dirname, '..', 'public', 'log-viewer.html'),
+      path.join(__dirname, '../public', 'log-viewer.html')
+    ];
+    
+    console.log('Trying paths:', possiblePaths);
+    
+    for (const filePath of possiblePaths) {
+      try {
+        const fs = require('fs');
+        if (fs.existsSync(filePath)) {
+          console.log('Found file at:', filePath);
+          return res.sendFile(filePath);
+        }
+      } catch (e) {
+        console.log('Path not accessible:', filePath);
+      }
+    }
+    
+    // If no file found, return error with available info
+    res.status(500).json({ 
+      error: 'Could not find log-viewer.html',
+      triedPaths: possiblePaths,
+      cwd: process.cwd(),
+      dirname: __dirname
+    });
   } catch (error) {
     console.error('Error serving log-viewer.html:', error);
     res.status(500).json({ error: 'Error serving log viewer page: ' + error.message });
@@ -62,9 +110,34 @@ app.get('/log-viewer', (req, res) => {
 app.get('/script.js', (req, res) => {
   try {
     console.log('Serving script.js');
-    const scriptPath = path.join(process.cwd(), 'public', 'script.js');
-    console.log('Script path:', scriptPath);
-    res.sendFile(scriptPath);
+    // Try multiple path approaches for serverless environment
+    const possiblePaths = [
+      path.join(process.cwd(), 'public', 'script.js'),
+      path.join(__dirname, '..', 'public', 'script.js'),
+      path.join(__dirname, '../public', 'script.js')
+    ];
+    
+    console.log('Trying paths:', possiblePaths);
+    
+    for (const filePath of possiblePaths) {
+      try {
+        const fs = require('fs');
+        if (fs.existsSync(filePath)) {
+          console.log('Found file at:', filePath);
+          return res.sendFile(filePath);
+        }
+      } catch (e) {
+        console.log('Path not accessible:', filePath);
+      }
+    }
+    
+    // If no file found, return error with available info
+    res.status(500).json({ 
+      error: 'Could not find script.js',
+      triedPaths: possiblePaths,
+      cwd: process.cwd(),
+      dirname: __dirname
+    });
   } catch (error) {
     console.error('Error serving script.js:', error);
     res.status(500).json({ error: 'Error serving script: ' + error.message });
