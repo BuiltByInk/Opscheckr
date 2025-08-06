@@ -34,7 +34,7 @@ const upload = multer({
 // Routes
 app.get('/', (req, res) => {
   try {
-    console.log('Serving index.html');
+    console.log('Serving index.html - Updated deployment');
     res.setHeader('Content-Type', 'text/html');
     res.send(`
 <!DOCTYPE html>
