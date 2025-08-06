@@ -35,11 +35,23 @@ const upload = multer({
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  try {
+    console.log('Serving index.html');
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  } catch (error) {
+    console.error('Error serving index.html:', error);
+    res.status(500).json({ error: 'Error serving index page' });
+  }
 });
 
 app.get('/log-viewer', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'log-viewer.html'));
+  try {
+    console.log('Serving log-viewer.html');
+    res.sendFile(path.join(__dirname, 'public', 'log-viewer.html'));
+  } catch (error) {
+    console.error('Error serving log-viewer.html:', error);
+    res.status(500).json({ error: 'Error serving log viewer page' });
+  }
 });
 
 // Health check endpoint
@@ -49,6 +61,12 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
+});
+
+// Catch-all route for debugging
+app.get('*', (req, res) => {
+  console.log('404 - Route not found:', req.url);
+  res.status(404).json({ error: 'Route not found', path: req.url });
 });
 
 // Upload endpoint
@@ -188,6 +206,14 @@ function extractSource(line) {
 
 // Error handling middleware
 app.use((error, req, res, next) => {
+  console.error('Error details:', {
+    message: error.message,
+    stack: error.stack,
+    name: error.name,
+    url: req.url,
+    method: req.method
+  });
+
   if (error instanceof multer.MulterError) {
     if (error.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({ error: 'File too large. Maximum size is 10MB.' });
@@ -198,8 +224,16 @@ app.use((error, req, res, next) => {
     return res.status(400).json({ error: error.message });
   }
   
-  console.error(error);
-  res.status(500).json({ error: 'Something went wrong!' });
+  // Send more detailed error in development
+  if (process.env.NODE_ENV !== 'production') {
+    res.status(500).json({ 
+      error: 'Something went wrong!',
+      details: error.message,
+      stack: error.stack
+    });
+  } else {
+    res.status(500).json({ error: 'Something went wrong!' });
+  }
 });
 
 // For local development
